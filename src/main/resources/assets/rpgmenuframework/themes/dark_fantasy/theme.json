@@ -1,0 +1,96 @@
+{
+  "backdrop": "#C5101215",
+  "panel": "#E116181B",
+  "panelAlt": "#D10C0E10",
+  "border": "#FF9B7A45",
+  "borderMuted": "#FF4B4030",
+  "accent": "#FFD5A94F",
+  "accentSoft": "#554E9BD8",
+  "text": "#FFE8D9BD",
+  "textMuted": "#FF9E968A",
+  "danger": "#FFCF4A45",
+  "slot": "#C31C1E20",
+  "slotHover": "#DD3B3327",
+  "slotSelected": "#DD55452B",
+  "padding": 8,
+  "slotSize": 22,
+  "disableUiSounds": false,
+  "uiSoundVolume": 0.78,
+  "sounds": {
+    "menu_open": {
+      "event": "rpgmenuframework:rpg_menu_open",
+      "volume": 0.62,
+      "pitch": 0.92
+    },
+    "menu_close": {
+      "event": "rpgmenuframework:rpg_menu_close",
+      "volume": 0.56,
+      "pitch": 0.88
+    },
+    "tab_switch": {
+      "event": "rpgmenuframework:tab_switch",
+      "volume": 0.42,
+      "pitch": 0.94
+    },
+    "subtab_switch": {
+      "event": "rpgmenuframework:subtab_switch",
+      "volume": 0.34,
+      "pitch": 1.0
+    },
+    "focus": {
+      "event": "rpgmenuframework:focus_move",
+      "volume": 0.2,
+      "pitch": 0.92
+    },
+    "select": {
+      "event": "rpgmenuframework:item_select",
+      "volume": 0.38,
+      "pitch": 0.96
+    },
+    "equip": {
+      "event": "rpgmenuframework:equip",
+      "volume": 0.64,
+      "pitch": 0.9
+    },
+    "replace_equipment": {
+      "event": "rpgmenuframework:replace_equipment",
+      "volume": 0.68,
+      "pitch": 0.84
+    },
+    "unequip": {
+      "event": "rpgmenuframework:unequip",
+      "volume": 0.58,
+      "pitch": 0.98
+    },
+    "favorite": {
+      "event": "rpgmenuframework:favorite",
+      "volume": 0.38,
+      "pitch": 1.02
+    },
+    "confirm": {
+      "event": "rpgmenuframework:confirm",
+      "volume": 0.48,
+      "pitch": 0.96
+    },
+    "cancel": {
+      "event": "rpgmenuframework:cancel",
+      "volume": 0.42,
+      "pitch": 0.88
+    },
+    "error": {
+      "event": "rpgmenuframework:error",
+      "volume": 0.52,
+      "pitch": 0.78
+    },
+    "modal_open": {
+      "event": "rpgmenuframework:modal_open",
+      "volume": 0.46,
+      "pitch": 0.9
+    },
+    "modal_close": {
+      "event": "rpgmenuframework:modal_close",
+      "volume": 0.4,
+      "pitch": 0.86
+    }
+  }
+}

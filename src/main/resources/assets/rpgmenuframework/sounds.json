@@ -1,0 +1,47 @@
+{
+  "rpg_menu_open": {
+    "sounds": ["rpgmenuframework:ui/abstract_01"]
+  },
+  "rpg_menu_close": {
+    "sounds": ["rpgmenuframework:ui/abstract_02"]
+  },
+  "tab_switch": {
+    "sounds": ["rpgmenuframework:ui/minimalist_04"]
+  },
+  "subtab_switch": {
+    "sounds": ["rpgmenuframework:ui/minimalist_03"]
+  },
+  "focus_move": {
+    "sounds": ["rpgmenuframework:ui/minimalist_01"]
+  },
+  "item_select": {
+    "sounds": ["rpgmenuframework:ui/minimalist_02"]
+  },
+  "equip": {
+    "sounds": ["rpgmenuframework:ui/wood_block_01"]
+  },
+  "replace_equipment": {
+    "sounds": ["rpgmenuframework:ui/wood_block_02"]
+  },
+  "unequip": {
+    "sounds": ["rpgmenuframework:ui/wood_block_03"]
+  },
+  "favorite": {
+    "sounds": ["rpgmenuframework:ui/minimalist_09"]
+  },
+  "confirm": {
+    "sounds": ["rpgmenuframework:ui/minimalist_10"]
+  },
+  "cancel": {
+    "sounds": ["rpgmenuframework:ui/minimalist_11"]
+  },
+  "error": {
+    "sounds": ["rpgmenuframework:ui/minimalist_13"]
+  },
+  "modal_open": {
+    "sounds": ["rpgmenuframework:ui/minimalist_05"]
+  },
+  "modal_close": {
+    "sounds": ["rpgmenuframework:ui/minimalist_06"]
+  }
+}
