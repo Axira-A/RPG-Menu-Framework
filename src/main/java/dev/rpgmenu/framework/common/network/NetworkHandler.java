@@ -12,13 +12,18 @@ import dev.rpgmenu.framework.common.network.payload.InventoryQueryPayload;
 import dev.rpgmenu.framework.common.network.payload.InventoryResultPayload;
 import dev.rpgmenu.framework.common.network.payload.EquipmentActionPayload;
 import dev.rpgmenu.framework.common.network.payload.EquipmentResultPayload;
+import dev.rpgmenu.framework.common.network.payload.QuickbarActionPayload;
+import dev.rpgmenu.framework.common.inventory.QuickbarTransactionCoordinator;
+import dev.rpgmenu.framework.common.inventory.QuickSlotTargets;
+import dev.rpgmenu.framework.api.equipment.EquipmentTarget;
+import dev.rpgmenu.framework.RpgMenuFramework;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public final class NetworkHandler {
-    public static final String PROTOCOL_VERSION = "2";
+    public static final String PROTOCOL_VERSION = "3";
     private NetworkHandler() {}
 
     public static void register(RegisterPayloadHandlersEvent event) {
@@ -30,6 +35,8 @@ public final class NetworkHandler {
         registrar.playToServer(EquipmentActionPayload.TYPE, EquipmentActionPayload.STREAM_CODEC, NetworkHandler::handleEquipmentAction);
         registrar.playToClient(EquipmentResultPayload.TYPE, EquipmentResultPayload.STREAM_CODEC,
                 (payload, context) -> ClientInventoryState.accept(payload));
+        registrar.playToServer(QuickbarActionPayload.TYPE, QuickbarActionPayload.STREAM_CODEC,
+                NetworkHandler::handleQuickbarAction);
     }
 
     private static void handleQuery(InventoryQueryPayload payload, IPayloadContext context) {
@@ -63,6 +70,29 @@ public final class NetworkHandler {
             result = EquipmentTransactionCoordinator.INSTANCE.execute(player, transaction, null);
         }
         context.reply(new EquipmentResultPayload(transaction.sessionId(), transaction.nonce(), transaction.target(),
+                result.status(), result.moved(), result.messageKey()));
+    }
+
+    private static void handleQuickbarAction(QuickbarActionPayload payload, IPayloadContext context) {
+        if (!(context.player() instanceof ServerPlayer player)) return;
+        TransactionResult result;
+        if (!MenuSessionManager.INSTANCE.active(player, payload.sessionId())) {
+            result = new TransactionResult(TransactionResult.Status.STALE, 0,
+                    "message.rpgmenuframework.stale_session");
+        } else {
+            MenuSessionManager.SessionAccess access = payload.action()
+                    == dev.rpgmenu.framework.api.inventory.QuickbarAction.PLACE_ENTRY
+                    ? MenuSessionManager.INSTANCE.resolve(player, payload.sessionId(), payload.entryOpaqueId()).orElse(null)
+                    : null;
+            result = QuickbarTransactionCoordinator.INSTANCE.execute(player, payload.sessionId(),
+                    payload.entryOpaqueId(), payload.nonce(), payload.action(), payload.source(), payload.target(), access);
+        }
+        var responseQuickTarget = payload.action() == dev.rpgmenu.framework.api.inventory.QuickbarAction.MOVE_TO_INVENTORY
+                ? payload.source() : payload.target();
+        EquipmentTarget responseTarget = QuickSlotTargets.equipmentTarget(responseQuickTarget);
+        if (responseTarget == null) responseTarget = new EquipmentTarget(RpgMenuFramework.id("invalid"), "invalid", 0);
+        context.reply(new EquipmentResultPayload(payload.sessionId(), payload.nonce(),
+                responseTarget,
                 result.status(), result.moved(), result.messageKey()));
     }
 }

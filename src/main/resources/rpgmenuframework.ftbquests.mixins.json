@@ -1,0 +1,12 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "dev.rpgmenu.framework.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "FtbBaseScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

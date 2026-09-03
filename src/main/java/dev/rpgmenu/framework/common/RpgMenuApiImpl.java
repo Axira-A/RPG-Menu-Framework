@@ -3,6 +3,7 @@ package dev.rpgmenu.framework.common;
 import dev.rpgmenu.framework.api.RpgMenuApi;
 import dev.rpgmenu.framework.api.inventory.InventorySource;
 import dev.rpgmenu.framework.api.inventory.ItemCategoryProvider;
+import dev.rpgmenu.framework.api.inventory.QuickEquipProvider;
 import dev.rpgmenu.framework.api.menu.MenuTabRegistry;
 import dev.rpgmenu.framework.api.registry.ProviderRegistry;
 import dev.rpgmenu.framework.api.stats.StatProvider;
@@ -22,6 +23,7 @@ public final class RpgMenuApiImpl implements RpgMenuApi {
     private static final MenuTabRegistry TABS = new MenuTabRegistryImpl();
     private static final ProviderRegistry<InventorySource> SOURCES = new CopyOnWriteProviderRegistry<>();
     private static final ProviderRegistry<ItemCategoryProvider> CATEGORIES = new CopyOnWriteProviderRegistry<>();
+    private static final ProviderRegistry<QuickEquipProvider> QUICK_EQUIP = new CopyOnWriteProviderRegistry<>();
     private static final ProviderRegistry<StatProvider> STATS = new CopyOnWriteProviderRegistry<>();
     private static final ProviderRegistry<EquipmentProvider> EQUIPMENT = new CopyOnWriteProviderRegistry<>();
     private static final ProviderRegistry<RarityProvider> RARITY = new CopyOnWriteProviderRegistry<>();
@@ -36,6 +38,7 @@ public final class RpgMenuApiImpl implements RpgMenuApi {
     @Override public MenuTabRegistry tabs() { return TABS; }
     @Override public ProviderRegistry<InventorySource> inventorySources() { return SOURCES; }
     @Override public ProviderRegistry<ItemCategoryProvider> itemCategories() { return CATEGORIES; }
+    @Override public ProviderRegistry<QuickEquipProvider> quickEquipProviders() { return QUICK_EQUIP; }
     @Override public ProviderRegistry<StatProvider> statProviders() { return STATS; }
     @Override public ProviderRegistry<EquipmentProvider> equipmentProviders() { return EQUIPMENT; }
     @Override public ProviderRegistry<RarityProvider> rarityProviders() { return RARITY; }

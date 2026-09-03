@@ -83,6 +83,8 @@ public final class PlayerInventorySource implements InventorySource {
 
     private static boolean matches(ServerPlayer player, ItemStack stack, InventoryQuery query) {
         if (query.equipmentTarget() != null) {
+            var quickTarget = QuickSlotTargets.fromEquipmentTarget(query.equipmentTarget()).orElse(null);
+            if (quickTarget != null && !QuickEquipResolver.canPlace(player, stack, quickTarget, false)) return false;
             var provider = RpgMenuApi.get().equipmentProviders().get(query.equipmentTarget().providerId()).orElse(null);
             if (provider == null || !provider.canEquip(player, query.equipmentTarget(), stack)) return false;
         }

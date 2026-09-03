@@ -21,6 +21,11 @@ sourceSets.main.resources {
 repositories {
     mavenCentral()
     maven {
+        name = 'FTB'
+        url = uri('https://maven.ftb.dev/releases')
+        content { includeGroup 'dev.ftb.mods' }
+    }
+    maven {
         name = 'Curios'
         url = uri('https://maven.theillusivec4.top/')
     }
@@ -71,6 +76,23 @@ configurations {
 
 dependencies {
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
+    compileOnly("dev.ftb.mods:ftb-library-neoforge:${ftb_library_version}") { transitive = false }
+    compileOnly("dev.ftb.mods:ftb-quests-neoforge:${ftb_quests_version}") { transitive = false }
+    // Optional local 1.21.1 development jars. The compat is reflective, so ordinary/CI builds do not require them.
+    // Pass -Pepic_fight_dev_jar=... and -Pepic_skills_dev_jar=... (or the matching environment variables)
+    // to compile/run against the exact modpack versions without ever packaging either third-party jar.
+    def epicFightDevJar = providers.gradleProperty('epic_fight_dev_jar')
+            .orElse(providers.environmentVariable('RPGMF_EPIC_FIGHT_JAR')).getOrNull()
+    def epicSkillsDevJar = providers.gradleProperty('epic_skills_dev_jar')
+            .orElse(providers.environmentVariable('RPGMF_EPIC_SKILLS_JAR')).getOrNull()
+    if (epicFightDevJar != null && file(epicFightDevJar).isFile()) {
+        compileOnly files(epicFightDevJar)
+        localRuntime files(epicFightDevJar)
+    }
+    if (epicSkillsDevJar != null && file(epicSkillsDevJar).isFile()) {
+        compileOnly files(epicSkillsDevJar)
+        localRuntime files(epicSkillsDevJar)
+    }
     testImplementation platform('org.junit:junit-bom:5.11.4')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }

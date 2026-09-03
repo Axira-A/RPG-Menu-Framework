@@ -40,7 +40,9 @@ public final class VanillaEquipmentProvider implements EquipmentProvider {
     @Override
     public boolean canEquip(Player player, EquipmentTarget target, ItemStack stack) {
         EquipmentSlot slot = resolve(target);
-        return slot != null && !stack.isEmpty() && player.getEquipmentSlotForItem(stack) == slot;
+        if (slot == null || stack.isEmpty()) return false;
+        if (slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND) return true;
+        return player.getEquipmentSlotForItem(stack) == slot;
     }
 
     @Override

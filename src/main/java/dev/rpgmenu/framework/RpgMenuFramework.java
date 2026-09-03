@@ -7,7 +7,13 @@ import dev.rpgmenu.framework.api.event.RegisterEquipmentProvidersEvent;
 import dev.rpgmenu.framework.api.event.RegisterItemCategoriesEvent;
 import dev.rpgmenu.framework.api.event.RegisterRpgMenuTabsEvent;
 import dev.rpgmenu.framework.api.event.RegisterStatProvidersEvent;
+import dev.rpgmenu.framework.api.event.RegisterSpellProvidersEvent;
+import dev.rpgmenu.framework.api.event.RegisterQuestProvidersEvent;
+import dev.rpgmenu.framework.api.event.RegisterMapProvidersEvent;
+import dev.rpgmenu.framework.api.event.RegisterSkillProvidersEvent;
+import dev.rpgmenu.framework.api.event.RegisterQuickEquipProvidersEvent;
 import dev.rpgmenu.framework.common.BuiltInContent;
+import dev.rpgmenu.framework.common.compat.CompatBootstrap;
 import dev.rpgmenu.framework.common.ModSoundEvents;
 import dev.rpgmenu.framework.common.config.FrameworkConfig;
 import dev.rpgmenu.framework.common.network.NetworkHandler;
@@ -15,7 +21,6 @@ import dev.rpgmenu.framework.common.gametest.EquipmentGameTests;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModList;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.common.Mod;
@@ -33,11 +38,6 @@ public final class RpgMenuFramework {
     public RpgMenuFramework(IEventBus modBus, ModContainer container) {
         ModSoundEvents.register(modBus);
         BuiltInContent.register();
-        if (ModList.get().isLoaded("curios")) {
-            RpgMenuApi.get().equipmentProviders().register(
-                    dev.rpgmenu.framework.common.compat.curios.CuriosEquipmentProvider.ID,
-                    new dev.rpgmenu.framework.common.compat.curios.CuriosEquipmentProvider());
-        }
         container.registerConfig(ModConfig.Type.CLIENT, FrameworkConfig.CLIENT_SPEC);
         modBus.addListener(NetworkHandler::register);
         modBus.addListener(this::registerGameTests);
@@ -48,12 +48,23 @@ public final class RpgMenuFramework {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-        RpgMenuApi api = RpgMenuApi.get();
-        NeoForge.EVENT_BUS.post(new RegisterRpgMenuTabsEvent(api.tabs()));
-        NeoForge.EVENT_BUS.post(new RegisterInventorySourcesEvent(api.inventorySources()));
-        NeoForge.EVENT_BUS.post(new RegisterItemCategoriesEvent(api.itemCategories()));
-        NeoForge.EVENT_BUS.post(new RegisterStatProvidersEvent(api.statProviders()));
-        NeoForge.EVENT_BUS.post(new RegisterEquipmentProvidersEvent(api.equipmentProviders()));
+        event.enqueueWork(() -> {
+            // Optional integrations register before extension events are published.  The registries maintain
+            // immutable read snapshots, so screens opened later always observe this completed registration.
+            CompatBootstrap.bootstrap();
+            RpgMenuApi api = RpgMenuApi.get();
+            NeoForge.EVENT_BUS.post(new RegisterRpgMenuTabsEvent(api.tabs()));
+            NeoForge.EVENT_BUS.post(new RegisterInventorySourcesEvent(api.inventorySources()));
+            NeoForge.EVENT_BUS.post(new RegisterItemCategoriesEvent(api.itemCategories()));
+            NeoForge.EVENT_BUS.post(new RegisterQuickEquipProvidersEvent(api.quickEquipProviders()));
+            NeoForge.EVENT_BUS.post(new RegisterStatProvidersEvent(api.statProviders()));
+            NeoForge.EVENT_BUS.post(new RegisterSpellProvidersEvent(api.spellProviders()));
+            NeoForge.EVENT_BUS.post(new RegisterQuestProvidersEvent(api.questProviders()));
+            NeoForge.EVENT_BUS.post(new RegisterMapProvidersEvent(api.mapProviders()));
+            NeoForge.EVENT_BUS.post(new RegisterSkillProvidersEvent(api.skillProviders()));
+            NeoForge.EVENT_BUS.post(new RegisterEquipmentProvidersEvent(api.equipmentProviders()));
+            CompatBootstrap.logDiagnostics(api);
+        });
     }
 
     private void registerGameTests(RegisterGameTestsEvent event) {

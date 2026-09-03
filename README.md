@@ -1,8 +1,10 @@
 # RPG Menu Framework
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 RPG Menu Framework is a dual-side Minecraft **1.21.1 / NeoForge 21.1.x / Java 21** mod that provides a responsive, extensible RPG player menu. It is a framework rather than a commercial-game UI clone: the bundled dark-fantasy presentation is original, uses only drawn primitives and Minecraft-rendered items/entities, and contains no third-party game assets.
 
-## Current playable baseline
+## Features
 
 - `E` optionally replaces the vanilla inventory screen; `R` is an independent RPG-menu key.
 - Dynamic semantic tabs, Java registration API, subpages, priorities, conditions, badges and overflow/compact rendering.
@@ -11,6 +13,9 @@ RPG Menu Framework is a dual-side Minecraft **1.21.1 / NeoForge 21.1.x / Java 21
 - Responsive virtual item Grid, categories, sorting model, `@modid` / normal / `#category` search and debounce.
 - Real final player render chain with skin, armor, layers and renderer replacements; draggable preview.
 - Vanilla equipment and attributes through providers.
+- Context-aware quick equip for vanilla hotbar slots, with optional Epic Fight support.
+- Optional integrations for Curios, More Offhand Slots, Iron's Spells 'n Spellbooks, FTB Quests, Xaero's World Map, JourneyMap, Epic Fight and Epic Skills. Tabs are shown only when their backing provider is available.
+- Embedded map view with configurable preferred provider and preserved pan/zoom state.
 - Non-pausing menu with normal remappable WASD/Space/Shift movement; focused search blocks movement passthrough.
 - Per-server favorites stored as UI metadata.
 - Resource-reloadable theme colors, `en_us` / `zh_cn`, resource-pack JSON tabs and a developer layout editor.
@@ -21,9 +26,22 @@ RPG Menu Framework is a dual-side Minecraft **1.21.1 / NeoForge 21.1.x / Java 21
 
 1. Install NeoForge `21.1.x` for Minecraft `1.21.1`.
 2. Put `rpgmenuframework-0.1.0.jar` in both client and server `mods` directories.
-3. Optional integrations are soft dependencies; this build does not require any of them to start.
+3. Optional integrations are soft dependencies; the framework starts without them. Install a supported integration on the appropriate side to enable its extra tab or equipment support.
 
-Client configuration is generated in `config/rpgmenuframework-client.toml`. Set `replaceVanillaInventory=false` to leave `E` unchanged and use `R` only.
+Client configuration is generated in `config/rpgmenuframework-client.toml`. Set `replaceVanillaInventory=false` to leave `E` unchanged and use `R` only. Use `preferredMapProvider` to select an installed map provider and `preserveMapView` to retain its center and zoom between menu openings.
+
+### Optional integrations
+
+| Integration | Menu support |
+| --- | --- |
+| Curios / More Offhand Slots | Additional equipment slots and safe equipment actions when installed. |
+| Iron's Spells 'n Spellbooks | Spells tab and spell-related stats. |
+| FTB Quests | Quests tab. |
+| Xaero's World Map / JourneyMap | Embedded map tab; choose a preferred installed provider in the client config. |
+| Epic Fight | Quick-equip integration. |
+| Epic Skills | Skills tab when Epic Fight is also present. |
+
+All integrations are optional. Availability is detected at startup; missing or incompatible optional mods do not prevent the framework from loading.
 
 ## Developer API
 
@@ -70,7 +88,7 @@ Selected UI sound effects are from **Universal UI/Menu Soundpack** by **Nathan G
 
 ## Known limits in 0.1.0
 
-- The public/provider boundaries for Curios, Beyond Dimensions, RarityCore, Epic Fight, Epic Skills, Iron's Spells, FTB Quests, JourneyMap and Controlify are present, but adapters that require their runtime/API artifacts are not shipped in this baseline. No guessed reflection or unsafe mixin was substituted.
+- Beyond Dimensions, RarityCore and Controlify have public extension boundaries, but do not ship a dedicated adapter in this release.
 - Virtual-grid withdrawal is implemented for external sources that provide safe `extract`/`insert`; vanilla inventory entries are inspect/favorite-only because native operations remain in the vanilla crafting inventory.
 - Theme JSON colors, layout overrides and namespaced UI sound mappings are active. Dynamic external PNG/TTF/OGG pack construction is not implemented; sound assets remain standard Minecraft resource-pack assets.
 - The layout editor currently edits position and size deltas; anchors, opacity and z-index are represented in the public schema but not all have editor controls yet.

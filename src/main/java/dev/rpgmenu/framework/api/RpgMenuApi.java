@@ -2,6 +2,7 @@ package dev.rpgmenu.framework.api;
 
 import dev.rpgmenu.framework.api.inventory.InventorySource;
 import dev.rpgmenu.framework.api.inventory.ItemCategoryProvider;
+import dev.rpgmenu.framework.api.inventory.QuickEquipProvider;
 import dev.rpgmenu.framework.api.equipment.EquipmentProvider;
 import dev.rpgmenu.framework.api.rarity.RarityProvider;
 import dev.rpgmenu.framework.api.skills.SkillProvider;
@@ -28,6 +29,8 @@ public interface RpgMenuApi {
     ProviderRegistry<InventorySource> inventorySources();
 
     ProviderRegistry<ItemCategoryProvider> itemCategories();
+
+    ProviderRegistry<QuickEquipProvider> quickEquipProviders();
 
     ProviderRegistry<StatProvider> statProviders();
 

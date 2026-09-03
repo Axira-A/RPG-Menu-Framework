@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.rpgmenu.framework.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "MinecraftScreenMixin",
+    "EpicSkillsScreenMixin",
+    "EpicSkillsTreePageMixin",
+    "EpicSkillsPayloadHandlerMixin",
+    "EpicSkillsProgressionMixin",
+    "XaeroGuiMapMixin",
+    "XaeroMiscMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

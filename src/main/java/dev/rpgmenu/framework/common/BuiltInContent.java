@@ -8,6 +8,7 @@ import dev.rpgmenu.framework.common.inventory.PlayerInventorySource;
 import dev.rpgmenu.framework.common.inventory.PredicateItemCategory;
 import dev.rpgmenu.framework.common.stats.VanillaStatProvider;
 import dev.rpgmenu.framework.common.equipment.VanillaEquipmentProvider;
+import dev.rpgmenu.framework.common.equipment.HotbarEquipmentProvider;
 import dev.rpgmenu.framework.common.rarity.VanillaRarityProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ArmorItem;
@@ -29,10 +30,34 @@ public final class BuiltInContent {
                 .priority(1_000).content(TabContentFactory.marker("inventory")).build());
         api.tabs().registerTab(RpgMenuTab.builder(RpgMenuFramework.id("attributes"), "tab.rpgmenuframework.attributes")
                 .priority(900).content(TabContentFactory.marker("attributes")).build());
+        api.tabs().registerTab(RpgMenuTab.builder(RpgMenuFramework.id("skills"), "tab.rpgmenuframework.skills")
+                .priority(850)
+                .visibleWhen(context -> RpgMenuApi.get().skillProviders().values().stream().anyMatch(provider -> {
+                    try {
+                        return provider.isAvailable();
+                    } catch (LinkageError | RuntimeException ignored) {
+                        return false;
+                    }
+                }))
+                .content(TabContentFactory.marker("skills"))
+                .build());
+        api.tabs().registerTab(RpgMenuTab.builder(RpgMenuFramework.id("map"), "tab.rpgmenuframework.map")
+                .priority(600)
+                .visibleWhen(context -> RpgMenuApi.get().mapProviders().values().stream().anyMatch(provider -> {
+                    try {
+                        return provider.isAvailable();
+                    } catch (LinkageError | RuntimeException ignored) {
+                        return false;
+                    }
+                }))
+                .content(TabContentFactory.marker("map"))
+                .build());
+        RpgMenuFramework.LOGGER.info("[RPGMF] Registered tab: {}", RpgMenuFramework.id("map"));
 
         api.inventorySources().register(PlayerInventorySource.ID, new PlayerInventorySource());
         api.statProviders().register(VanillaStatProvider.ID, new VanillaStatProvider());
         api.equipmentProviders().register(VanillaEquipmentProvider.ID, new VanillaEquipmentProvider());
+        api.equipmentProviders().register(HotbarEquipmentProvider.ID, new HotbarEquipmentProvider());
         api.rarityProviders().register(VanillaRarityProvider.ID, new VanillaRarityProvider());
 
         category("all", 1_000, false, stack -> true, "everything");
